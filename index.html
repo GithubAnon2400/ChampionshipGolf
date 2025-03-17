@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Championship Golf</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="loading-screen" style="display: flex;">
+            <h1>Championship Golf</h1>
+            <div class="loading-spinner"></div>
+            <p>Loading game assets...</p>
+        </div>
+
+        <div id="start-screen" class="screen" style="display: none;">
+            <h1>Championship Golf</h1>
+            <div id="player-form">
+                <input type="text" id="player-name" placeholder="Enter your name" required>
+                <div id="character-selection">
+                    <h2>Select your golfer</h2>
+                    <div class="characters">
+                        <div class="character" data-character="ace">
+                            <div class="character-preview ace"></div>
+                            <h3>Ace</h3>
+                            <div class="stats">
+                                <div class="stat">Power: <span class="power-value">8</span>/10</div>
+                                <div class="stat">Accuracy: <span class="accuracy-value">7</span>/10</div>
+                                <div class="stat">Luck: <span class="luck-value">5</span>/10</div>
+                            </div>
+                        </div>
+                        <div class="character" data-character="birdie">
+                            <div class="character-preview birdie"></div>
+                            <h3>Birdie</h3>
+                            <div class="stats">
+                                <div class="stat">Power: <span class="power-value">6</span>/10</div>
+                                <div class="stat">Accuracy: <span class="accuracy-value">9</span>/10</div>
+                                <div class="stat">Luck: <span class="luck-value">7</span>/10</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="start-game-btn" disabled>Start Game</button>
+            </div>
+        </div>
+
+        <div id="game-screen" class="screen" style="display: none;">
+            <div id="game-ui">
+                <div id="hole-info">
+                    <span id="hole-number">Hole 1</span>
+                    <span id="hole-par">Par 3</span>
+                </div>
+                <div id="player-info">
+                    <span id="player-name-display"></span>
+                    <span id="player-score">Score: 0</span>
+                    <span id="player-strokes">Strokes: 0</span>
+                </div>
+                <div id="game-details">
+                    Distance to Hole: 0 yards<br>
+                    Club: DRIVER (Max: 300 yards)
+                </div>
+                <div id="shot-controls">
+                    <div id="power-meter-container">
+                        <div id="power-meter"></div>
+                        <div id="power-indicator"></div>
+                    </div>
+                    <div id="direction-controls">
+                        <button id="rotate-left">←</button>
+                        <button id="rotate-right">→</button>
+                    </div>
+                    <button id="swing-btn">Swing!</button>
+                    <button id="trick-shot-btn">Trick Shot!</button>
+                </div>
+                <button id="open-leaderboard-btn">Leaderboard</button>
+            </div>
+            <div id="canvas-container"></div>
+            <div id="controls-box">
+                <h3>Game Controls</h3>
+                <ul>
+                    <li><strong>← →</strong>: Rotate direction</li>
+                    <li><strong>Swing!</strong>: Hit the ball</li>
+                    <li><strong>Power Meter</strong>: Click to set power</li>
+                    <li><strong>Trick Shot!</strong>: Attempt a bonus shot</li>
+                    <li><strong>Camera</strong>: Resets after each shot</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="leaderboard-screen" class="screen" style="display: none;">
+            <h1>Leaderboard</h1>
+            <div class="leaderboard-tabs">
+                <button class="tab-btn active" data-tab="daily">Today's Best</button>
+                <button class="tab-btn" data-tab="legends">Legends of Golf</button>
+            </div>
+            <div id="daily-leaderboard" class="leaderboard-content active">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Score</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="daily-leaderboard-body"></tbody>
+                </table>
+            </div>
+            <div id="legends-leaderboard" class="leaderboard-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Score</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="legends-leaderboard-body"></tbody>
+                </table>
+            </div>
+            <button id="close-leaderboard-btn">Back to Game</button>
+            <button id="share-score-btn">Share Your Score!</button>
+        </div>
+
+        <div id="game-over-screen" class="screen" style="display: none;">
+            <h1>Game Complete!</h1>
+            <div id="final-score-display">
+                <h2>Your Final Score: <span id="final-score">0</span></h2>
+                <p>Congrats! Share your epic golf skills!</p>
+            </div>
+            <div id="leaderboard-submission">
+                <h3>Submit your score to the leaderboard</h3>
+                <form id="leaderboard-form">
+                    <input type="text" id="submission-name" placeholder="Confirm your name" required>
+                    <input type="email" id="submission-email" placeholder="Enter your email" required>
+                    <button type="submit" id="submit-score-btn">Submit Score</button>
+                </form>
+            </div>
+            <button id="play-again-btn">Play Again</button>
+            <button id="share-final-score-btn">Share Score!</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+    <script src="js/models.js"></script>
+    <script src="js/physics.js"></script>
+    <script src="js/course.js"></script>
+    <script src="js/characters.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/leaderboard.js"></script>
+    <script src="js/game.js"></script>
+    <script>
+        window.addEventListener('load', () => {
+            window.game = new Game();
+            document.getElementById('loading-screen').style.display = 'none';
+            document.getElementById('start-screen').style.display = 'flex';
+        });
+    </script>
+</body>
+</html>
