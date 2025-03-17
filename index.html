@@ -140,6 +140,10 @@
             <button id="play-again-btn">Play Again</button>
             <button id="share-final-score-btn">Share Score!</button>
         </div>
+        <div id="error-fallback" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; background: rgba(0,0,0,0.7); padding: 20px; border-radius: 10px;">
+            <h2>Oops!</h2>
+            <p>Failed to load the game. Check the console for details or try refreshing.</p>
+        </div>
     </div>
 
     <!-- Scripts -->
@@ -155,9 +159,19 @@
     <script src="js/game.js"></script>
     <script>
         window.addEventListener('load', () => {
-            window.game = new Game();
-            document.getElementById('loading-screen').style.display = 'none';
-            document.getElementById('start-screen').style.display = 'flex';
+            try {
+                window.game = new Game();
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('start-screen').style.display = 'flex';
+            } catch (e) {
+                console.error('Game initialization failed:', e);
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('error-fallback').style.display = 'block';
+            }
+        });
+        window.addEventListener('error', (e) => {
+            console.error('Global error:', e.message);
+            document.getElementById('error-fallback').style.display = 'block';
         });
     </script>
 </body>
